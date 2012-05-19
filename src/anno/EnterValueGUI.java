@@ -1,11 +1,10 @@
 package anno;
 
 import java.awt.Dimension;
-import java.lang.reflect.Array;
+import java.awt.FlowLayout;
+import java.beans.PropertyVetoException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -14,6 +13,7 @@ import javax.swing.JFrame;
 public class EnterValueGUI {
 
   public static Box box = null;
+  public static JFrame frame = null;
   private static Class theBeanClass = null;
   public static TheBean theBean = null;
 
@@ -27,7 +27,7 @@ public class EnterValueGUI {
     }
 
     theBean.setDebug(true);
-    JFrame frame = new JFrame("TheBean GUI");
+    frame = new JFrame("TheBean GUI");
 
     box = new Box(BoxLayout.Y_AXIS);
     frame.add(box);
@@ -38,8 +38,9 @@ public class EnterValueGUI {
       e.printStackTrace();
     }
 
+    frame.setLayout(new FlowLayout());
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setLocation(700, 400);
+    frame.setLocation(300, 100);
     frame.pack();
     frame.setVisible(true);
 
@@ -55,7 +56,7 @@ public class EnterValueGUI {
       if (f.getAnnotation(Interface.class) == null)
         continue;
       MyField field = new MyField(f);
-      field.addComponents();
+      field.addComponent();
     }
   }
   
@@ -64,12 +65,8 @@ public class EnterValueGUI {
       if (m.getAnnotation(Interface.class) == null)
         continue;
       
-      System.out.println(m.getName());
-      for (Class p : m.getParameterTypes()) {
-        System.out.println(p);
-      }
-
       MyMethod method = new MyMethod(m);
+      method.addComponents();
     }
   }
   

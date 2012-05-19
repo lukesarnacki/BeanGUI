@@ -6,10 +6,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JTextField;
 
-public class TField extends JTextField implements ActionListener {
+public class FieldTextField extends JTextField implements ActionListener {
 
     private MyField field = null;
-    public TField(MyField field) {
+    public FieldTextField(MyField field) {
         super();
         this.field = field;
         try {

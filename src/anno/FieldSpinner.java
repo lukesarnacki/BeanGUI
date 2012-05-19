@@ -6,11 +6,11 @@ import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class Spinner extends JSpinner implements ChangeListener {
+public class FieldSpinner extends JSpinner implements ChangeListener {
 
     MyField field = null;
   
-    Spinner(MyField field){
+    FieldSpinner(MyField field){
         this.field = field;
         setPreferredSize(EnterValueGUI.DIM);
         setMaximumSize(EnterValueGUI.DIM);

@@ -2,6 +2,7 @@ package anno;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import javax.swing.Box;
 
@@ -26,21 +27,28 @@ public class MyField {
     
     try {
       getterMethod = theBeanClass.getDeclaredMethod(MyUtils.getterFrom(field.getName()));
-      setterMethod = theBeanClass.getDeclaredMethod( MyUtils.setterFrom(field.getName()), field.getType() );
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-  
-  public void addComponents() {
-    if (isString()) {
-      addStringComponent();
-    } else if (isInteger()) {
-      addIntegerComponents();
+    
+    try {
+      setterMethod = theBeanClass.getDeclaredMethod( MyUtils.setterFrom(field.getName()), field.getType() );
+    } catch (SecurityException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      setterMethod = null;
     }
   }
   
-  public void addIntegerComponents() {
+  public void addComponent() {
+    if (isString()) {
+      addStringComponent();
+    } else if (isInteger()) {
+      addIntegerComponent();
+    }
+  }
+  
+  public void addIntegerComponent() {
     if (isRange()) {
       addSliderComponent();
     } else {
@@ -59,32 +67,39 @@ public class MyField {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    
+    if (isEnabled()) {
+      slide.setEnabled(false);
+    }
     EnterValueGUI.box.add(slide);
     EnterValueGUI.box.add(Box.createVerticalStrut(20));
   }
   
   public void addSpinnerComponent() {
-    Spinner spin = null;
+    FieldSpinner spin = null;
     try {
-      spin = new Spinner(this);
+      spin = new FieldSpinner(this);
     } catch (Exception e) {
       e.printStackTrace();
     }
-    
+    if (isEnabled()) {
+      spin.setEnabled(false);
+    }
     EnterValueGUI.box.add(spin);
     EnterValueGUI.box.add(Box.createVerticalStrut(20));
   }
   
   public void addStringComponent() {
     EnterValueGUI.box.add(Box.createVerticalStrut(20));
-    TField field = null;
+    FieldTextField tField = null;
     try {
-      field = new TField(this);
+      tField = new FieldTextField(this);
     } catch (Exception e) {
       e.printStackTrace();
     }
-    EnterValueGUI.box.add(field);
+    if (isEnabled()) {
+      tField.setEnabled(false);
+    }
+    EnterValueGUI.box.add(tField);
     EnterValueGUI.box.add(Box.createVerticalStrut(20));
   }
   
@@ -92,7 +107,9 @@ public class MyField {
   
   
   
-  
+  public Boolean isEnabled() {
+    return setterMethod == null || Modifier.isPrivate(setterMethod.getModifiers());
+  }
   
   public Boolean isString() {
     return field.getType().toString().equals(String.class.toString());
@@ -109,15 +126,7 @@ public class MyField {
   public Boolean isInterface() {
     return field.isAnnotationPresent(Interface.class);
  }
-
-  public Interface getInterfaceAnnotation() {
-    return interfaceAnnotation;
-  }
-
-  public Range getRangeAnnotation() {
-    return rangeAnnotation;
-  }
-
+  
   public Method getGetterMethod() {
     return getterMethod;
   }
