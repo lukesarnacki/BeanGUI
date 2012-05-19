@@ -1,5 +1,6 @@
 package anno;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,9 +10,14 @@ public class TField extends JTextField implements ActionListener {
 
     private MyField field = null;
     public TField(MyField field) {
-        super("" + 0, 1 + (int)Math.log10(100));
+        super();
         this.field = field;
-        setMaximumSize(EnterValueGUI.DIM);
+        try {
+          setText((String)field.getterMethod.invoke(EnterValueGUI.theBean));
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        setMaximumSize(new Dimension(300, 30));
         addActionListener(this);
     }
 

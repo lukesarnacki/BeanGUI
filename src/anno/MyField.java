@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 
 import javax.swing.Box;
 
+
 public class MyField {
 
   protected Field field;
@@ -14,22 +15,36 @@ public class MyField {
   private Method setterMethod;
   private static Class theBeanClass;
   protected TheBean theBean;
-  protected Box box;
 
-  MyField(Field field, Box box) {
+  MyField(Field field) {
     this.field = field;
     TheBean theBean = new TheBean();
     theBean.setDebug(true);
     theBeanClass = TheBean.class;
     rangeAnnotation = field.getAnnotation(Range.class);
     interfaceAnnotation = field.getAnnotation(Interface.class);
-    this.box = box;
     
     try {
       getterMethod = theBeanClass.getDeclaredMethod(MyUtils.getterFrom(field.getName()));
       setterMethod = theBeanClass.getDeclaredMethod( MyUtils.setterFrom(field.getName()), field.getType() );
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+  
+  public void addComponents() {
+    if (isString()) {
+      addStringComponent();
+    } else if (isInteger()) {
+      addIntegerComponents();
+    }
+  }
+  
+  public void addIntegerComponents() {
+    if (isRange()) {
+      addSliderComponent();
+    } else {
+      addSpinnerComponent();
     }
   }
   
@@ -45,8 +60,8 @@ public class MyField {
       e.printStackTrace();
     }
     
-    box.add(slide);
-    box.add(Box.createVerticalStrut(20));
+    EnterValueGUI.box.add(slide);
+    EnterValueGUI.box.add(Box.createVerticalStrut(20));
   }
   
   public void addSpinnerComponent() {
@@ -57,20 +72,20 @@ public class MyField {
       e.printStackTrace();
     }
     
-    box.add(spin);
-    box.add(Box.createVerticalStrut(20));
+    EnterValueGUI.box.add(spin);
+    EnterValueGUI.box.add(Box.createVerticalStrut(20));
   }
   
   public void addStringComponent() {
-    box.add(Box.createVerticalStrut(20));
+    EnterValueGUI.box.add(Box.createVerticalStrut(20));
     TField field = null;
     try {
       field = new TField(this);
     } catch (Exception e) {
       e.printStackTrace();
     }
-    box.add(field);
-    box.add(Box.createVerticalStrut(20));
+    EnterValueGUI.box.add(field);
+    EnterValueGUI.box.add(Box.createVerticalStrut(20));
   }
   
   

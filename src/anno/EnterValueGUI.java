@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 
 public class EnterValueGUI {
 
-  private static Box box = null;
+  public static Box box = null;
   private static Class theBeanClass = null;
   public static TheBean theBean = null;
 
@@ -46,25 +46,33 @@ public class EnterValueGUI {
   }
 
   private static void addComponents() {
+    addFieldComponents();
+    addMethodComponents();
+  }
+
+  private static void addFieldComponents() {
     for (Field f : theBeanClass.getDeclaredFields()) {
       if (f.getAnnotation(Interface.class) == null)
         continue;
-
-      MyField field = new MyField(f, box);
-
-      if (field.isInterface()) {
-        if (field.isString()) {
-          field.addStringComponent();
-        } else if (field.isInteger()) {
-          if (field.isRange()) {
-            field.addSliderComponent();
-          } else {
-            field.addSpinnerComponent();
-          }
-        }
-      }
+      MyField field = new MyField(f);
+      field.addComponents();
     }
   }
+  
+  private static void addMethodComponents() {
+    for (Method m : theBeanClass.getDeclaredMethods()) {
+      if (m.getAnnotation(Interface.class) == null)
+        continue;
+      
+      System.out.println(m.getName());
+      for (Class p : m.getParameterTypes()) {
+        System.out.println(p);
+      }
 
+      MyMethod method = new MyMethod(m);
+    }
+  }
+  
+  
   public static final Dimension DIM = new Dimension(50, 30);
 }
