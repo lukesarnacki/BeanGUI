@@ -3,6 +3,7 @@ package anno;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JOptionPane;
@@ -11,7 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class FieldSpinner extends JSpinner implements ChangeListener,
-    PropertyChangeListener {
+    PropertyChangeListener, VetoableChangeListener {
   
   private static final long serialVersionUID = 1L;
   MyField field = null;
@@ -45,5 +46,9 @@ public class FieldSpinner extends JSpinner implements ChangeListener,
     removeChangeListener(this);
     setValue(evt.getNewValue());
     addChangeListener(this);
+  }
+  
+  public void vetoableChange(PropertyChangeEvent evt)
+      throws PropertyVetoException {
   }
 }

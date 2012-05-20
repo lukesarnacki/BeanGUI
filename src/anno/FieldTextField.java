@@ -6,13 +6,14 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class FieldTextField extends JTextField implements ActionListener,
-    PropertyChangeListener {
+    PropertyChangeListener, VetoableChangeListener {
 
   private static final long serialVersionUID = 1L;
   private MyField field = null;
@@ -47,5 +48,8 @@ public class FieldTextField extends JTextField implements ActionListener,
     setText((String) evt.getNewValue());
     addActionListener(this);
   }
+  public void vetoableChange(PropertyChangeEvent evt)
+      throws PropertyVetoException {
 
+  }
 }

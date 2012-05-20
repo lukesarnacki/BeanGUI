@@ -1,6 +1,8 @@
 package anno;
 
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -59,6 +61,20 @@ public class MyField {
     
     try {
       m.invoke(EnterValueGUI.theBean, field.getName().toUpperCase(), (PropertyChangeListener) component);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
+    try {
+      m = TheBean.class.getDeclaredMethod("addVetoableChangeListener", new Class[] {String.class, VetoableChangeListener.class});
+    } catch (Exception e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+    
+    try {
+      m.invoke(EnterValueGUI.theBean, field.getName().toUpperCase(), (VetoableChangeListener) component);
     } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
