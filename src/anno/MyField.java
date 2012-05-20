@@ -1,5 +1,6 @@
 package anno;
 
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -10,12 +11,12 @@ import javax.swing.Box;
 public class MyField {
 
   protected Field field;
-  private Interface interfaceAnnotation;
   protected Range rangeAnnotation;
   protected Method getterMethod;
-  private Method setterMethod;
-  private static Class theBeanClass;
+  protected Method setterMethod;
+  private static Class<TheBean> theBeanClass;
   protected TheBean theBean;
+  private Object component;
 
   MyField(Field field) {
     this.field = field;
@@ -23,7 +24,7 @@ public class MyField {
     theBean.setDebug(true);
     theBeanClass = TheBean.class;
     rangeAnnotation = field.getAnnotation(Range.class);
-    interfaceAnnotation = field.getAnnotation(Interface.class);
+    field.getAnnotation(Interface.class);
     
     try {
       getterMethod = theBeanClass.getDeclaredMethod(MyUtils.getterFrom(field.getName()));
@@ -45,6 +46,22 @@ public class MyField {
       addStringComponent();
     } else if (isInteger()) {
       addIntegerComponent();
+    }
+    
+    
+    Method m = null;
+    try {
+      m = TheBean.class.getDeclaredMethod("addPropertyChangeListener", new Class[] {String.class, PropertyChangeListener.class});
+    } catch (Exception e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+    
+    try {
+      m.invoke(EnterValueGUI.theBean, field.getName().toUpperCase(), (PropertyChangeListener) component);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
   }
   
@@ -70,6 +87,7 @@ public class MyField {
     if (isEnabled()) {
       slide.setEnabled(false);
     }
+    component = slide;
     EnterValueGUI.box.add(slide);
     EnterValueGUI.box.add(Box.createVerticalStrut(20));
   }
@@ -84,6 +102,7 @@ public class MyField {
     if (isEnabled()) {
       spin.setEnabled(false);
     }
+    component = spin;
     EnterValueGUI.box.add(spin);
     EnterValueGUI.box.add(Box.createVerticalStrut(20));
   }
@@ -99,6 +118,7 @@ public class MyField {
     if (isEnabled()) {
       tField.setEnabled(false);
     }
+    component = tField;
     EnterValueGUI.box.add(tField);
     EnterValueGUI.box.add(Box.createVerticalStrut(20));
   }

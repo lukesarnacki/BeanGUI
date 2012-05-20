@@ -2,7 +2,6 @@ package anno;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.beans.PropertyVetoException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -14,7 +13,7 @@ public class EnterValueGUI {
 
   public static Box box = null;
   public static JFrame frame = null;
-  private static Class theBeanClass = null;
+  private static Class<TheBean> theBeanClass = null;
   public static TheBean theBean = null;
 
   public static void main(String[] args) {
@@ -28,10 +27,10 @@ public class EnterValueGUI {
 
     theBean.setDebug(true);
     frame = new JFrame("TheBean GUI");
-
+    
     box = new Box(BoxLayout.Y_AXIS);
     frame.add(box);
-
+    
     try {
       addComponents();
     } catch (Exception e) {

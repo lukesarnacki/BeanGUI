@@ -5,9 +5,8 @@ import java.awt.Dimension;
 import javax.swing.JTextField;
 
 public class ParameterTextField extends JTextField{
+  private static final long serialVersionUID = 1L;
 
-  //private MyMethod method;
-  
   public ParameterTextField() {
       super();
       //method = m;
