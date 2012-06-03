@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import javax.swing.Box;
+import javax.swing.JFrame;
 
 
 public class MyField {
@@ -19,8 +20,12 @@ public class MyField {
   private static Class<TheBean> theBeanClass;
   protected TheBean theBean;
   private Object component;
+  private Box box;
+  private JFrame frame;
 
-  MyField(Field field) {
+  MyField(Field field, Box box, JFrame frame) {
+    this.box = box;
+    this.frame = frame;
     this.field = field;
     TheBean theBean = new TheBean();
     theBean.setDebug(true);
@@ -90,12 +95,13 @@ public class MyField {
   }
   
   public void addSliderComponent() {
-    Slider slide = null;
+    FieldSlider slide = null;
     try {
-      slide = new Slider(
+      slide = new FieldSlider(
           this,
           rangeAnnotation.min(),
-          rangeAnnotation.max()
+          rangeAnnotation.max(),
+          frame
       );
     } catch (Exception e) {
       e.printStackTrace();
@@ -104,14 +110,14 @@ public class MyField {
       slide.setEnabled(false);
     }
     component = slide;
-    EnterValueGUI.box.add(slide);
-    EnterValueGUI.box.add(Box.createVerticalStrut(20));
+    box.add(slide);
+    box.add(Box.createVerticalStrut(20));
   }
   
   public void addSpinnerComponent() {
     FieldSpinner spin = null;
     try {
-      spin = new FieldSpinner(this);
+      spin = new FieldSpinner(this, frame);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -119,15 +125,15 @@ public class MyField {
       spin.setEnabled(false);
     }
     component = spin;
-    EnterValueGUI.box.add(spin);
-    EnterValueGUI.box.add(Box.createVerticalStrut(20));
+    box.add(spin);
+    box.add(Box.createVerticalStrut(20));
   }
   
   public void addStringComponent() {
-    EnterValueGUI.box.add(Box.createVerticalStrut(20));
+    box.add(Box.createVerticalStrut(20));
     FieldTextField tField = null;
     try {
-      tField = new FieldTextField(this);
+      tField = new FieldTextField(this, frame);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -135,8 +141,8 @@ public class MyField {
       tField.setEnabled(false);
     }
     component = tField;
-    EnterValueGUI.box.add(tField);
-    EnterValueGUI.box.add(Box.createVerticalStrut(20));
+    box.add(tField);
+    box.add(Box.createVerticalStrut(20));
   }
   
   

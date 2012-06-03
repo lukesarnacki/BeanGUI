@@ -6,24 +6,27 @@ import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class Slider extends JSlider implements ChangeListener,
+public class FieldSlider extends JSlider implements ChangeListener,
     PropertyChangeListener, VetoableChangeListener {
 
   private static final long serialVersionUID = 1L;
   MyField field = null;
+  private JFrame frame;
 
-  Slider(MyField field, int min, int max) {
+  FieldSlider(MyField field, int min, int max, JFrame frame) {
     super(min, max);
     try {
       setValue((Integer) field.getterMethod.invoke(EnterValueGUI.theBean));
     } catch (Exception e) {
       e.printStackTrace();
     }
+    this.frame = frame;
     this.field = field;
     setPaintLabels(true);
     setPaintTrack(true);
@@ -38,7 +41,7 @@ public class Slider extends JSlider implements ChangeListener,
       field.getSetterMethod().invoke(EnterValueGUI.theBean, getValue());
     } catch (InvocationTargetException e) {
       if (e.getCause() instanceof PropertyVetoException)
-        JOptionPane.showMessageDialog(EnterValueGUI.frame, e.getCause(), "Veto", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(frame, e.getCause(), "Veto", JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -55,6 +58,9 @@ public class Slider extends JSlider implements ChangeListener,
   @Override
   public void vetoableChange(PropertyChangeEvent evt)
       throws PropertyVetoException {
+      System.out.println(evt);
+      System.out.println(evt.getNewValue());
+
   }
 
 }

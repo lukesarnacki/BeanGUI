@@ -9,6 +9,7 @@ import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -17,9 +18,11 @@ public class FieldTextField extends JTextField implements ActionListener,
 
   private static final long serialVersionUID = 1L;
   private MyField field = null;
+  private JFrame frame;
 
-  public FieldTextField(MyField field) {
+  public FieldTextField(MyField field, JFrame frame) {
     super();
+    this.frame = frame;
     this.field = field;
     try {
       setText((String) field.getterMethod.invoke(EnterValueGUI.theBean));
@@ -35,7 +38,7 @@ public class FieldTextField extends JTextField implements ActionListener,
       field.getSetterMethod().invoke(EnterValueGUI.theBean, getText());
     } catch (InvocationTargetException e) {
       if (e.getCause() instanceof PropertyVetoException)
-        JOptionPane.showMessageDialog(EnterValueGUI.frame, e.getCause(), "Veto", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(frame, e.getCause(), "Veto", JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
       e.printStackTrace();
     }

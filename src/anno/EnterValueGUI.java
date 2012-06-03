@@ -11,8 +11,6 @@ import javax.swing.JFrame;
 
 public class EnterValueGUI {
 
-  public static Box box = null;
-  public static JFrame frame = null;
   private static Class<TheBean> theBeanClass = null;
   public static TheBean theBean = null;
 
@@ -26,13 +24,15 @@ public class EnterValueGUI {
     }
 
     theBean.setDebug(true);
+    JFrame frame = null;
     frame = new JFrame("TheBean GUI");
     
+    Box box = null;
     box = new Box(BoxLayout.Y_AXIS);
     frame.add(box);
     
     try {
-      addComponents();
+      addComponents(box, frame);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -45,26 +45,26 @@ public class EnterValueGUI {
 
   }
 
-  private static void addComponents() {
-    addFieldComponents();
-    addMethodComponents();
+  private static void addComponents(Box box, JFrame frame) {
+    addFieldComponents(box, frame);
+    addMethodComponents(box, frame);
   }
 
-  private static void addFieldComponents() {
+  private static void addFieldComponents(Box box, JFrame frame) {
     for (Field f : theBeanClass.getDeclaredFields()) {
       if (f.getAnnotation(Interface.class) == null)
         continue;
-      MyField field = new MyField(f);
+      MyField field = new MyField(f, box, frame);
       field.addComponent();
     }
   }
   
-  private static void addMethodComponents() {
+  private static void addMethodComponents(Box box, JFrame frame) {
     for (Method m : theBeanClass.getDeclaredMethods()) {
       if (m.getAnnotation(Interface.class) == null)
         continue;
       
-      MyMethod method = new MyMethod(m);
+      MyMethod method = new MyMethod(m, box, frame);
       method.addComponents();
     }
   }

@@ -6,6 +6,7 @@ import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
@@ -16,9 +17,11 @@ public class FieldSpinner extends JSpinner implements ChangeListener,
   
   private static final long serialVersionUID = 1L;
   MyField field = null;
+  private JFrame frame;
 
-  FieldSpinner(MyField field) {
+  FieldSpinner(MyField field, JFrame frame) {
     this.field = field;
+    this.frame = frame;
     setPreferredSize(EnterValueGUI.DIM);
     setMaximumSize(EnterValueGUI.DIM);
     try {
@@ -34,7 +37,7 @@ public class FieldSpinner extends JSpinner implements ChangeListener,
       field.getSetterMethod().invoke(EnterValueGUI.theBean, getValue());
     } catch (InvocationTargetException e) {
       if (e.getCause() instanceof PropertyVetoException)
-        JOptionPane.showMessageDialog(EnterValueGUI.frame, e.getCause(), "Veto", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(frame, e.getCause(), "Veto", JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -50,5 +53,7 @@ public class FieldSpinner extends JSpinner implements ChangeListener,
   
   public void vetoableChange(PropertyChangeEvent evt)
       throws PropertyVetoException {
+      System.out.println(evt);
+      System.out.println(evt.getNewValue());
   }
 }

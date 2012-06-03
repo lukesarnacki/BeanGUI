@@ -6,15 +6,21 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class MyMethod implements ActionListener {
   
   private Method method;
   private ArrayList<ParameterPresenter> parameterPresenters;
+  private Box box;
+  private JFrame frame;
   
-  public MyMethod(Method m) {
+  public MyMethod(Method m, Box box, JFrame frame) {
+    this.box = box;
+    this.frame = frame;
     parameterPresenters = new ArrayList<ParameterPresenter>();
     method = m;
   }
@@ -32,14 +38,14 @@ public class MyMethod implements ActionListener {
         ParameterSpinner s = new ParameterSpinner();
         ParameterPresenter parameterPresenter = new IntegerParameterPresenter(s); 
         parameterPresenters.add(parameterPresenter);
-        EnterValueGUI.box.add(s);
+        box.add(s);
         
       } else if (p.toString().equals(String.class.toString())) {
         
         ParameterTextField t = new ParameterTextField();
         ParameterPresenter parameterPresenter = new StringParameterPresenter(t); 
         parameterPresenters.add(parameterPresenter);
-        EnterValueGUI.box.add(t);
+        box.add(t);
       }
     }
     
@@ -49,7 +55,7 @@ public class MyMethod implements ActionListener {
     
     JButton b = new JButton(method.getName());
     b.addActionListener(this);
-    EnterValueGUI.box.add(b);
+    box.add(b);
   } 
 
   @Override
@@ -63,7 +69,7 @@ public class MyMethod implements ActionListener {
     try {
       method.invoke(EnterValueGUI.theBean, parameters.toArray());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(EnterValueGUI.frame, e.getCause());
+      JOptionPane.showMessageDialog(frame, e.getCause());
       //e.printStackTrace();
     } 
   }
